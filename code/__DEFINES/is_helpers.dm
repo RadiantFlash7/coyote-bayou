@@ -48,6 +48,9 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 
 #define istransparentturf(A) (istype(A, /turf/open/transparent))
 
+//Crayon and spray cannable turfs
+#define ispaintableturf(A) (isfloorturf(A) || isindestructiblefloor(A) || iswallturf(A) || isindestructiblewall(A))
+
 //Mobs
 #define isliving(A) (istype(A, /mob/living))
 
@@ -215,6 +218,10 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 #define isprojectile(A) (istype(A, /obj/item/projectile))
 
 #define isgun(A) (istype(A, /obj/item/gun))
+
+#define isballistic(A) (istype(A, /obj/item/gun/ballistic))
+
+#define isammobox(A) (istype(A, /obj/item/ammo_box))
 
 #define isfood(A) (istype(A, /obj/item/reagent_containers/food/snacks))
 

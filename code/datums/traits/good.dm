@@ -627,7 +627,6 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 	gain_text = span_notice("You are adept at crafting makeshift weapons.")
 	lose_text = span_danger("You seem to have forgotten how to craft makeshift weapons...")
 	medical_record_text = "Patient appears to enjoy tinkering with custom guns."
-	human_only = FALSE
 
 /datum/quirk/gunsmith/add()
 	var/mob/living/carbon/human/H = quirk_holder
@@ -655,7 +654,6 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 	gain_text = span_notice("Your smithed weapons will now be of masterwork quality.")
 	lose_text = span_danger("You seem less adept at crafting masterworks.")
 	medical_record_text = "Patient appears to be a well renowned gunsmith."
-	human_only = FALSE
 
 /datum/quirk/voracious
 	name = "Bottomless Stomach"
@@ -770,10 +768,12 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 
 /datum/quirk/nukalover
 	name = "Cola Fiend"
-	desc = "You are a fan of America's most popular pre-war soft drink. Your body simply loves the sugary drink so much, it rejects healthier alternatives. Cosmic Cola heals you, sort of."
-	value = 14
+	desc = "You just can't get enough of that hyper-sweetened, tooth-rotting, waistline-widening, pancreas-pummeling sodapop! \
+		So much so that your body has adapted to the sugars and artificial flavorings, processing those calories into healing energy. \
+		Won't do much for that waistline, though."
+	value = 22
 	category = "Food Quirks"
-	mechanics = "You heal slowly when intaking Cosmic Cola."
+	mechanics = "Various sodapop-derived drinks will provide (usually minor) healing, typically based on their complexity."
 	conflicts = list(
 		/datum/quirk/vegetarian,
 		/datum/quirk/no_taste,
@@ -1185,7 +1185,7 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 */
 
 /datum/quirk/whitelegstraditions
-	name = "Post Apocalytpic Tribal Traditions"
+	name = "Post Apocalyptic Tribal Traditions"
 	desc = "You remember how to make your peoples ancient garments after all this time."
 	value = 0
 	category = "Crafting Quirks"
@@ -2159,7 +2159,7 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 	name = "Shocking Grasp"
 	desc = "You know how to cast the shocking grasp cantrip"
 	value = 32
-	category = "Cantrips"
+	category = "Magic Quirks"
 	mechanics = "When using the *shocking emote, you summon a melee spell cantrip that strikes fast and delivers powerful shocks to your foes"
 	conflicts = list(
 		/datum/quirk/littleleagues,
@@ -2169,6 +2169,30 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 	gain_text = span_notice("You know how to cast shocking grasp!")
 	lose_text = span_danger("You no longer know how to cast shocking grasp!.")
 	human_only = FALSE
+
+/datum/quirk/telepathy
+	name = "Innate Telepathy"
+	desc = "You innately have the ability to project your thoughts directly into the minds of others."
+	value = 12 //A good chunk of the cost of being mute, if you decide to take both. Mostly an RP quick as well, so somewhat cheap. You have to pay 1 of your 6 good quirk slots for it.
+	category = "Magic Quirks"
+	mechanics = "You can use a telepathy spell to speak to others' minds directly. However, you and your target will glow so it's quite obvious you casted it."
+	conflicts = list(
+
+					)
+	mob_trait = TRAIT_TELEPATHY
+	gain_text = span_notice("You suddenly don't feel the need to talk out loud anymore.")
+	lose_text = span_danger("Talking out loud suddenly feels like a much better idea.")
+	medical_record_text = "Patient appears to posess the ability to speak directly to the minds of others."
+	human_only = FALSE
+
+/datum/quirk/telepathy/add()
+	quirk_holder.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/telepathy/quirk)
+
+/datum/quirk/telepathy/remove()
+	if(LAZYLEN(quirk_holder?.mind?.spell_list))
+		for(var/s in quirk_holder?.mind?.spell_list)
+			if(istype(s, /obj/effect/proc_holder/spell/targeted/telepathy/quirk))
+				quirk_holder.mind.RemoveSpell(s)
 
 //datum/quirk/booming
 	//name = "Booming Blade"
@@ -2281,7 +2305,9 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 	mechanics = "Grants access to positive Big Leagues & Health - Tougher!"
 	conflicts = list(
 		/datum/quirk/bigleagues,
-		/datum/quirk/lifegiverplus
+		/datum/quirk/lifegiverplus,
+		/datum/quirk/flimsy,
+		/datum/quirk/veryflimsy
 		)
 	gain_text = span_notice("DAMN BRO YOU SWOLE!")
 	lose_text = span_notice("Maybe you could skip gym day...")
@@ -2435,7 +2461,6 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 		/datum/quirk/gunsmith,
 		/datum/quirk/masterworksmith,
 	)
-	human_only = FALSE
 
 /datum/quirk/package/legendarywepsm/add()
 	var/mob/living/H = quirk_holder
@@ -2462,7 +2487,8 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 	mechanics = "Grants access to positive trait Primitive Tech & Chemwiz."
 	conflicts = list(
 		/datum/quirk/tribal_tech,
-		/datum/quirk/chemwhiz
+		/datum/quirk/chemwhiz,
+		/datum/quirk/dumb
 		)
 	gain_text = span_notice("The secrets of chemistry are all laid out before you...")
 	lose_text = span_notice("Sulphur?  I barely know her!")
@@ -2594,7 +2620,8 @@ GLOBAL_LIST_INIT(weapons_of_texarkana, list(
 	mechanics = "Grants access to positive trait Chem Whiz & Minor Surgery."
 	conflicts = list(
 		/datum/quirk/chemwhiz,
-		/datum/quirk/surgerylow
+		/datum/quirk/surgerylow,
+		/datum/quirk/dumb
 		)
 	gain_text = span_notice("Let's go practice medicine!")
 	lose_text = span_notice("I really think I need a true medical license...")
